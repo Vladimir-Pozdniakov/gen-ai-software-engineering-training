@@ -1,8 +1,8 @@
 """Pydantic models for the banking transactions API.
 
 Input/output JSON uses camelCase (``fromAccount``); Python attributes use snake_case.
-Business validation (amount rules, account format, currency, per-type account rules)
-is added in ``validators.py`` (Step 3).
+Field-level checks (amount, account format, currency) live in ``validators.py``; the
+per-type account rules are enforced by ``TransactionCreate``.
 """
 
 from datetime import UTC, datetime
@@ -70,7 +70,11 @@ class TransactionCreate(CamelModel):
 
     @model_validator(mode="after")
     def _check_accounts_for_type(self) -> Self:
-        """deposit -> toAccount; withdrawal -> fromAccount; transfer -> both, different."""
+        """deposit -> toAccount only; withdrawal -> fromAccount only; transfer -> both, different.
+
+        The unused side must be absent, otherwise balance/summary math would debit or
+        credit an account the transaction type says is not involved.
+        """
         errors: list[tuple[str, str]] = []
         needs_from = self.type in (TransactionType.WITHDRAWAL, TransactionType.TRANSFER)
         needs_to = self.type in (TransactionType.DEPOSIT, TransactionType.TRANSFER)
@@ -78,6 +82,10 @@ class TransactionCreate(CamelModel):
             errors.append(("fromAccount", f"fromAccount is required for {self.type}"))
         if needs_to and self.to_account is None:
             errors.append(("toAccount", f"toAccount is required for {self.type}"))
+        if not needs_from and self.from_account is not None:
+            errors.append(("fromAccount", f"fromAccount must not be set for {self.type}"))
+        if not needs_to and self.to_account is not None:
+            errors.append(("toAccount", f"toAccount must not be set for {self.type}"))
         if (
             self.type is TransactionType.TRANSFER
             and self.from_account is not None
@@ -85,7 +93,7 @@ class TransactionCreate(CamelModel):
         ):
             errors.append(("toAccount", "toAccount must differ from fromAccount"))
         if errors:
-            # Carry the offending field in ctx so the error handler (Step 6) can report it.
+            # Report each error under its own field name (via ``loc``) so errors.py can show it.
             raise ValidationError.from_exception_data(
                 self.__class__.__name__,
                 [

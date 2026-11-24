@@ -11,7 +11,7 @@ router = APIRouter(prefix="/accounts", tags=["accounts"])
 
 
 def valid_account_id(account_id: str) -> str:
-    """Path dependency: reject malformed ids as a validation error (HTTP 400 after Step 6)."""
+    """Path dependency: reject malformed ids as a validation error (rendered as HTTP 400 by errors.py)."""
     try:
         return validate_account(account_id)
     except ValueError as exc:

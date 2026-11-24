@@ -72,7 +72,7 @@ pip install -r requirements.txt    # includes pytest, pytest-cov, httpx, ruff
 pytest --cov=src --cov-report=term-missing
 ```
 
-Expected: **95 passed**, 100% line coverage of `src/`. (A `StarletteDeprecationWarning`
+Expected: **103 passed**, 100% line coverage of `src/`. (A `StarletteDeprecationWarning`
 about `httpx` is harmless.)
 
 Lint / format:
@@ -86,7 +86,8 @@ ruff check . && ruff format --check .
 | Variable | Default | Meaning |
 |----------|---------|---------|
 | `PORT` | `3000` | Port used by `demo/run.sh` |
-| `RATE_LIMIT_PER_MINUTE` | `100` | Max requests per minute per client IP |
+| `HOST` | `127.0.0.1` | Interface used by `demo/run.sh` (`0.0.0.0` exposes the API on the network) |
+| `RATE_LIMIT_PER_MINUTE` | `100` | Max requests per minute per client IP (integer ≥ 1, otherwise startup fails) |
 
 ## Notes
 

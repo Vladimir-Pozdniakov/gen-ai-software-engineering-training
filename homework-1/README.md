@@ -75,7 +75,7 @@ src/
 └── routes/
     ├── transactions.py
     └── accounts.py
-tests/                 # pytest suite (95 tests, 100% line coverage of src/)
+tests/                 # pytest suite (103 tests, 100% line coverage of src/)
 demo/                  # run.sh, sample-requests.{sh,http}, sample-data.json
 ```
 
@@ -88,7 +88,8 @@ have no dependency on models, which avoids import cycles and keeps them unit-tes
 - **`Decimal` for money**: amounts are parsed as `Decimal` so `0.1 × 10` is exactly `1.0`;
   they are serialized as JSON numbers. Strings and booleans are rejected as amounts.
 - **Field rules by type**: `deposit` needs `toAccount`; `withdrawal` needs `fromAccount`;
-  `transfer` needs both and they must differ. The unused side is `null`.
+  `transfer` needs both and they must differ. Supplying the unused side is rejected (400),
+  so it is always `null`.
 - **Status**: transactions are stored as `completed` immediately (there is no async settlement).
   Balances and summaries only count `completed` transactions.
 - **No overdraft check**: the sample transfer from an empty account must succeed, so balances
@@ -113,7 +114,7 @@ have no dependency on models, which avoids import cycles and keeps them unit-tes
 pytest --cov=src --cov-report=term-missing
 ```
 
-95 tests cover every endpoint, the validation matrix, each filter alone and combined, balance
+103 tests cover every endpoint, the validation matrix, each filter alone and combined, balance
 math, summary, CSV, rate limiting (with a fake clock) and the error handlers.
 
 ## 🤖 AI Usage

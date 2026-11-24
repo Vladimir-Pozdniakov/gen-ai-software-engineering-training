@@ -76,13 +76,13 @@ def test_multiple_errors_reported_together(client):
 
 
 def test_deposit_requires_to_account(client):
-    assert details(post(client, type="deposit", toAccount=...)) == {
+    assert details(post(client, type="deposit", fromAccount=..., toAccount=...)) == {
         "toAccount": "toAccount is required for deposit"
     }
 
 
 def test_withdrawal_requires_from_account(client):
-    assert details(post(client, type="withdrawal", fromAccount=...)) == {
+    assert details(post(client, type="withdrawal", toAccount=..., fromAccount=...)) == {
         "fromAccount": "fromAccount is required for withdrawal"
     }
 
@@ -110,3 +110,21 @@ def test_missing_body(client):
 def test_invalid_request_is_not_stored(client):
     post(client, amount=-1)
     assert client.get("/transactions").json() == []
+
+
+def test_deposit_rejects_from_account(client):
+    assert details(post(client, type="deposit")) == {
+        "fromAccount": "fromAccount must not be set for deposit"
+    }
+
+
+def test_withdrawal_rejects_to_account(client):
+    assert details(post(client, type="withdrawal")) == {
+        "toAccount": "toAccount must not be set for withdrawal"
+    }
+
+
+def test_deposit_does_not_debit_other_account(client):
+    """Regression: a deposit naming a source account used to be accepted and debit it."""
+    assert post(client, type="deposit", amount=50).status_code == 400
+    assert client.get("/accounts/ACC-12345/balance").json()["balances"] == {}

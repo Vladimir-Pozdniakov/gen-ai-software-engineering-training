@@ -58,3 +58,13 @@ def test_stale_clients_are_pruned(monkeypatch):
     now[0] = 100.0
     mw._check("d")
     assert set(mw._hits) == {"d"}
+
+
+import pytest
+
+
+@pytest.mark.parametrize("value", ["", "abc", "5/min", "0", "-3"])
+def test_invalid_rate_limit_env_fails_clearly(monkeypatch, value):
+    monkeypatch.setenv("RATE_LIMIT_PER_MINUTE", value)
+    with pytest.raises(RuntimeError, match="RATE_LIMIT_PER_MINUTE must be an integer >= 1"):
+        create_app()
