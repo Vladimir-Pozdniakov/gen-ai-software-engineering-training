@@ -63,9 +63,9 @@ class TransactionCreate(CamelModel):
     def _check_account(cls, value: str | None) -> str | None:
         return None if value is None else validate_account(value)
 
-    @field_validator("currency")
+    @field_validator("currency", mode="before")
     @classmethod
-    def _check_currency(cls, value: str) -> str:
+    def _check_currency(cls, value: object) -> str:
         return validate_currency(value)
 
     @model_validator(mode="after")

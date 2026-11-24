@@ -5,7 +5,7 @@ Each ``validate_*``/``parse_*`` function returns the normalized value or raises
 """
 
 import re
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 
 ACCOUNT_RE = re.compile(r"^ACC-[A-Za-z0-9]{5}$")
 
@@ -35,10 +35,7 @@ def parse_amount(value: object) -> Decimal:
     if isinstance(value, bool) or not isinstance(value, int | float | Decimal):
         # ValueError (not TypeError): Pydantic only turns ValueError into a validation error.
         raise ValueError(AMOUNT_POSITIVE_MSG)  # noqa: TRY004
-    try:
-        amount = value if isinstance(value, Decimal) else Decimal(str(value))
-    except InvalidOperation:
-        raise ValueError(AMOUNT_POSITIVE_MSG) from None
+    amount = value if isinstance(value, Decimal) else Decimal(str(value))
     if not amount.is_finite() or amount <= 0:
         raise ValueError(AMOUNT_POSITIVE_MSG)
     if amount.as_tuple().exponent < -2 and amount != amount.quantize(Decimal("0.01")):
@@ -52,7 +49,7 @@ def validate_account(value: str) -> str:
     return value
 
 
-def validate_currency(value: str) -> str:
-    if value not in ISO_4217_CODES:
+def validate_currency(value: object) -> str:
+    if not isinstance(value, str) or value not in ISO_4217_CODES:
         raise ValueError(CURRENCY_MSG)
     return value
