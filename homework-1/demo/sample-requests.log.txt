@@ -1,0 +1,76 @@
+### Load sample-data.json (8 transactions)
+201 201 201 201 201 201 201 201
+
+### Create a transaction (201)
+{"id":"b4fd7036-3533-4936-b8f5-8f15443a632b","fromAccount":"ACC-12345","toAccount":"ACC-67890","amount":100.5,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.598945Z","status":"completed"}
+HTTP 201
+
+### List all transactions (200)
+[{"id":"93dd9e45-482a-40a1-9f87-3664c0a94294","fromAccount":"ACC-12345","toAccount":"ACC-67890","amount":100.5,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.491724Z","status":"completed"},{"id":"00790931-0ef8-4e6a-aefe-25220a81b4ba","fromAccount":null,"toAccount":"ACC-12345","amount":1000.0,"currency":"USD","type":"deposit","timestamp":"2026-11-24T23:01:24.504652Z","status":"completed"},{"id":"fd9bba5a-8b01-421a-8bc7-566584bf73a2","fromAccount":null,"toAccount":"ACC-67890","amount":250.75,"currency":"USD","type":"deposit","timestamp":"2026-11-24T23:01:24.516225Z","status":"completed"},{"id":"8c964fe2-a8c8-495b-a43f-bd742796439e","fromAccount":"ACC-12345","toAccount":null,"amount":200.0,"currency":"USD","type":"withdrawal","timestamp":"2026-11-24T23:01:24.529844Z","status":"completed"},{"id":"264af10b-75df-407e-8f5a-6ff2f5f30467","fromAccount":"ACC-67890","toAccount":"ACC-AB123","amount":75.25,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.543903Z","status":"completed"},{"id":"7c1d35d1-ad7d-4ed2-a745-aa8131ea4eca","fromAccount":null,"toAccount":"ACC-12345","amount":500.0,"currency":"EUR","type":"deposit","timestamp":"2026-11-24T23:01:24.557565Z","status":"completed"},{"id":"ec89f4bd-d26c-44bc-b96d-50a9d3140ea3","fromAccount":"ACC-AB123","toAccount":"ACC-12345","amount":40.0,"currency":"GBP","type":"transfer","timestamp":"2026-11-24T23:01:24.571483Z","status":"completed"},{"id":"458e52c4-02ff-4d80-9c80-2c964d12d433","fromAccount":"ACC-AB123","toAccount":null,"amount":15.99,"currency":"GBP","type":"withdrawal","timestamp":"2026-11-24T23:01:24.584567Z","status":"completed"},{"id":"b4fd7036-3533-4936-b8f5-8f15443a632b","fromAccount":"ACC-12345","toAccount":"ACC-67890","amount":100.5,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.598945Z","status":"completed"}]
+HTTP 200
+
+### Filter: accountId=ACC-12345
+[{"id":"93dd9e45-482a-40a1-9f87-3664c0a94294","fromAccount":"ACC-12345","toAccount":"ACC-67890","amount":100.5,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.491724Z","status":"completed"},{"id":"00790931-0ef8-4e6a-aefe-25220a81b4ba","fromAccount":null,"toAccount":"ACC-12345","amount":1000.0,"currency":"USD","type":"deposit","timestamp":"2026-11-24T23:01:24.504652Z","status":"completed"},{"id":"8c964fe2-a8c8-495b-a43f-bd742796439e","fromAccount":"ACC-12345","toAccount":null,"amount":200.0,"currency":"USD","type":"withdrawal","timestamp":"2026-11-24T23:01:24.529844Z","status":"completed"},{"id":"7c1d35d1-ad7d-4ed2-a745-aa8131ea4eca","fromAccount":null,"toAccount":"ACC-12345","amount":500.0,"currency":"EUR","type":"deposit","timestamp":"2026-11-24T23:01:24.557565Z","status":"completed"},{"id":"ec89f4bd-d26c-44bc-b96d-50a9d3140ea3","fromAccount":"ACC-AB123","toAccount":"ACC-12345","amount":40.0,"currency":"GBP","type":"transfer","timestamp":"2026-11-24T23:01:24.571483Z","status":"completed"},{"id":"b4fd7036-3533-4936-b8f5-8f15443a632b","fromAccount":"ACC-12345","toAccount":"ACC-67890","amount":100.5,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.598945Z","status":"completed"}]
+HTTP 200
+
+### Filter: type=deposit
+[{"id":"00790931-0ef8-4e6a-aefe-25220a81b4ba","fromAccount":null,"toAccount":"ACC-12345","amount":1000.0,"currency":"USD","type":"deposit","timestamp":"2026-11-24T23:01:24.504652Z","status":"completed"},{"id":"fd9bba5a-8b01-421a-8bc7-566584bf73a2","fromAccount":null,"toAccount":"ACC-67890","amount":250.75,"currency":"USD","type":"deposit","timestamp":"2026-11-24T23:01:24.516225Z","status":"completed"},{"id":"7c1d35d1-ad7d-4ed2-a745-aa8131ea4eca","fromAccount":null,"toAccount":"ACC-12345","amount":500.0,"currency":"EUR","type":"deposit","timestamp":"2026-11-24T23:01:24.557565Z","status":"completed"}]
+HTTP 200
+
+### Filter: date range
+[{"id":"93dd9e45-482a-40a1-9f87-3664c0a94294","fromAccount":"ACC-12345","toAccount":"ACC-67890","amount":100.5,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.491724Z","status":"completed"},{"id":"00790931-0ef8-4e6a-aefe-25220a81b4ba","fromAccount":null,"toAccount":"ACC-12345","amount":1000.0,"currency":"USD","type":"deposit","timestamp":"2026-11-24T23:01:24.504652Z","status":"completed"},{"id":"fd9bba5a-8b01-421a-8bc7-566584bf73a2","fromAccount":null,"toAccount":"ACC-67890","amount":250.75,"currency":"USD","type":"deposit","timestamp":"2026-11-24T23:01:24.516225Z","status":"completed"},{"id":"8c964fe2-a8c8-495b-a43f-bd742796439e","fromAccount":"ACC-12345","toAccount":null,"amount":200.0,"currency":"USD","type":"withdrawal","timestamp":"2026-11-24T23:01:24.529844Z","status":"completed"},{"id":"264af10b-75df-407e-8f5a-6ff2f5f30467","fromAccount":"ACC-67890","toAccount":"ACC-AB123","amount":75.25,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.543903Z","status":"completed"},{"id":"7c1d35d1-ad7d-4ed2-a745-aa8131ea4eca","fromAccount":null,"toAccount":"ACC-12345","amount":500.0,"currency":"EUR","type":"deposit","timestamp":"2026-11-24T23:01:24.557565Z","status":"completed"},{"id":"ec89f4bd-d26c-44bc-b96d-50a9d3140ea3","fromAccount":"ACC-AB123","toAccount":"ACC-12345","amount":40.0,"currency":"GBP","type":"transfer","timestamp":"2026-11-24T23:01:24.571483Z","status":"completed"},{"id":"458e52c4-02ff-4d80-9c80-2c964d12d433","fromAccount":"ACC-AB123","toAccount":null,"amount":15.99,"currency":"GBP","type":"withdrawal","timestamp":"2026-11-24T23:01:24.584567Z","status":"completed"},{"id":"b4fd7036-3533-4936-b8f5-8f15443a632b","fromAccount":"ACC-12345","toAccount":"ACC-67890","amount":100.5,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.598945Z","status":"completed"}]
+HTTP 200
+
+### Combined filters: accountId + type + date range
+[{"id":"00790931-0ef8-4e6a-aefe-25220a81b4ba","fromAccount":null,"toAccount":"ACC-12345","amount":1000.0,"currency":"USD","type":"deposit","timestamp":"2026-11-24T23:01:24.504652Z","status":"completed"},{"id":"7c1d35d1-ad7d-4ed2-a745-aa8131ea4eca","fromAccount":null,"toAccount":"ACC-12345","amount":500.0,"currency":"EUR","type":"deposit","timestamp":"2026-11-24T23:01:24.557565Z","status":"completed"}]
+HTTP 200
+
+### Get one transaction by id (200)
+{"id":"93dd9e45-482a-40a1-9f87-3664c0a94294","fromAccount":"ACC-12345","toAccount":"ACC-67890","amount":100.5,"currency":"USD","type":"transfer","timestamp":"2026-11-24T23:01:24.491724Z","status":"completed"}
+HTTP 200
+
+### Unknown transaction id (404)
+{"error":"Transaction not found"}
+HTTP 404
+
+### Account balance (per currency)
+{"accountId":"ACC-12345","balances":{"USD":599.0,"EUR":500.0,"GBP":40.0}}
+HTTP 200
+
+### Account summary
+{"accountId":"ACC-12345","totalDeposits":{"USD":1000.0,"EUR":500.0},"totalWithdrawals":{"USD":200.0},"transactionCount":6,"mostRecentTransaction":"2026-11-24T23:01:24.598945Z"}
+HTTP 200
+
+### Export CSV
+id,fromAccount,toAccount,amount,currency,type,timestamp,status
+93dd9e45-482a-40a1-9f87-3664c0a94294,ACC-12345,ACC-67890,100.50,USD,transfer,2026-11-24T23:01:24.491724Z,completed
+00790931-0ef8-4e6a-aefe-25220a81b4ba,,ACC-12345,1000.00,USD,deposit,2026-11-24T23:01:24.504652Z,completed
+fd9bba5a-8b01-421a-8bc7-566584bf73a2,,ACC-67890,250.75,USD,deposit,2026-11-24T23:01:24.516225Z,completed
+8c964fe2-a8c8-495b-a43f-bd742796439e,ACC-12345,,200.00,USD,withdrawal,2026-11-24T23:01:24.529844Z,completed
+264af10b-75df-407e-8f5a-6ff2f5f30467,ACC-67890,ACC-AB123,75.25,USD,transfer,2026-11-24T23:01:24.543903Z,completed
+7c1d35d1-ad7d-4ed2-a745-aa8131ea4eca,,ACC-12345,500.00,EUR,deposit,2026-11-24T23:01:24.557565Z,completed
+ec89f4bd-d26c-44bc-b96d-50a9d3140ea3,ACC-AB123,ACC-12345,40.00,GBP,transfer,2026-11-24T23:01:24.571483Z,completed
+458e52c4-02ff-4d80-9c80-2c964d12d433,ACC-AB123,,15.99,GBP,withdrawal,2026-11-24T23:01:24.584567Z,completed
+b4fd7036-3533-4936-b8f5-8f15443a632b,ACC-12345,ACC-67890,100.50,USD,transfer,2026-11-24T23:01:24.598945Z,completed
+
+HTTP 200
+
+### Validation error: negative amount + bad currency (400)
+{"error":"Validation failed","details":[{"field":"amount","message":"Amount must be a positive number"},{"field":"currency","message":"Invalid currency code"}]}
+HTTP 400
+
+### Validation error: 3 decimals + bad account format (400)
+{"error":"Validation failed","details":[{"field":"fromAccount","message":"Account must follow format ACC-XXXXX (X is alphanumeric)"},{"field":"amount","message":"Amount must have at most 2 decimal places"}]}
+HTTP 400
+
+### Validation error: transfer to the same account (400)
+{"error":"Validation failed","details":[{"field":"toAccount","message":"toAccount must differ from fromAccount"}]}
+HTTP 400
+
+### Invalid filter (400)
+{"error":"Validation failed","details":[{"field":"type","message":"Input should be 'deposit', 'withdrawal' or 'transfer'"}]}
+HTTP 400
+
+### Invalid account id on balance (400)
+{"error":"Validation failed","details":[{"field":"accountId","message":"Account must follow format ACC-XXXXX (X is alphanumeric)"}]}
+HTTP 400
