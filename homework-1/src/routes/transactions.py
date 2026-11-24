@@ -1,7 +1,13 @@
-from fastapi import APIRouter, HTTPException, status
+from datetime import date
+from typing import Annotated
 
-from src.models import Transaction, TransactionCreate
+from fastapi import APIRouter, HTTPException, Query, status
+from fastapi.exceptions import RequestValidationError
+from pydantic import AfterValidator
+
+from src.models import Transaction, TransactionCreate, TransactionType
 from src.storage import StoreDep
+from src.validators import validate_account
 
 router = APIRouter(prefix="/transactions", tags=["transactions"])
 
@@ -12,8 +18,35 @@ def create_transaction(body: TransactionCreate, store: StoreDep) -> Transaction:
 
 
 @router.get("", response_model=list[Transaction])
-def list_transactions(store: StoreDep) -> list[Transaction]:
-    return store.list()
+def list_transactions(
+    store: StoreDep,
+    account_id: Annotated[
+        str | None,
+        AfterValidator(lambda v: v if v is None else validate_account(v)),
+        Query(
+            alias="accountId",
+            description="Match transactions where the account is sender or receiver",
+        ),
+    ] = None,
+    type_: Annotated[TransactionType | None, Query(alias="type")] = None,
+    date_from: Annotated[
+        date | None, Query(alias="from", description="Inclusive start date, YYYY-MM-DD")
+    ] = None,
+    date_to: Annotated[
+        date | None, Query(alias="to", description="Inclusive end date, YYYY-MM-DD")
+    ] = None,
+) -> list[Transaction]:
+    if date_from and date_to and date_from > date_to:
+        raise RequestValidationError(
+            [
+                {
+                    "type": "value_error",
+                    "loc": ("query", "to"),
+                    "msg": "'to' must not be earlier than 'from'",
+                }
+            ]
+        )
+    return store.list(account_id=account_id, type_=type_, date_from=date_from, date_to=date_to)
 
 
 @router.get("/{transaction_id}", response_model=Transaction)
