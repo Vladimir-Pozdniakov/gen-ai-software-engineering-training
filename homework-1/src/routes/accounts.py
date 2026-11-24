@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import RequestValidationError
 
-from src.services import compute_balances
+from src.services import compute_balances, compute_summary
 from src.storage import StoreDep
 from src.validators import validate_account
 
@@ -30,3 +30,8 @@ def get_balance(
 ) -> dict:
     balances = compute_balances(store, account_id)
     return {"accountId": account_id, "balances": {c: float(v) for c, v in balances.items()}}
+
+
+@router.get("/{account_id}/summary")
+def get_summary(account_id: AccountId, store: StoreDep) -> dict:
+    return compute_summary(store, account_id)

@@ -1,11 +1,12 @@
 from datetime import date
-from typing import Annotated
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Query, Response, status
 from fastapi.exceptions import RequestValidationError
 from pydantic import AfterValidator
 
 from src.models import Transaction, TransactionCreate, TransactionType
+from src.services import transactions_to_csv
 from src.storage import StoreDep
 from src.validators import validate_account
 
@@ -47,6 +48,18 @@ def list_transactions(
             ]
         )
     return store.list(account_id=account_id, type_=type_, date_from=date_from, date_to=date_to)
+
+
+# Declared before "/{transaction_id}" so "export" isn't captured as an id.
+@router.get("/export")
+def export_transactions(
+    store: StoreDep, format_: Annotated[Literal["csv"], Query(alias="format")] = "csv"
+) -> Response:
+    return Response(
+        content=transactions_to_csv(store.list()),
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="transactions.csv"'},
+    )
 
 
 @router.get("/{transaction_id}", response_model=Transaction)
