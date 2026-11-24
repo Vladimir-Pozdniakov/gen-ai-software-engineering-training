@@ -2,6 +2,9 @@
 
 from datetime import date
 from threading import Lock
+from typing import Annotated
+
+from fastapi import Depends
 
 from src.models import Transaction, TransactionCreate, TransactionType
 
@@ -57,3 +60,6 @@ _store = TransactionStore()
 def get_store() -> TransactionStore:
     """FastAPI dependency; override in tests via ``app.dependency_overrides``."""
     return _store
+
+
+StoreDep = Annotated[TransactionStore, Depends(get_store)]
