@@ -65,7 +65,7 @@ Install and configure **three external MCP servers** (GitHub, Filesystem, Jira o
 |-------------|-------------|
 | **MCP configurations** | `mcp.json` / `.mcp.json` with all four servers registered |
 | **Custom MCP server** | `custom-mcp-server/server.py` with resource and `read` tool |
-| **Dependencies file** | `requirements.txt` or `pyproject.toml` including `fastmcp` |
+| **Dependencies file** | `requirements.txt` or `../homework-1/pyproject.toml` including `fastmcp` |
 | **Lorem ipsum source** | `custom-mcp-server/lorem-ipsum.md` used by the resource |
 | **Screenshots** | In `docs/screenshots/`: results for each MCP server interaction |
 | **Documentation** | `README.md` (description, author name) and `HOWTORUN.md` (install, run, connect, and usage instructions) |
